@@ -11,6 +11,8 @@ export class GameModel {
 
   private figure: IFigure;
 
+  private gameOver: boolean = false;
+
   constructor(private context: IComponentContext) {
     this.field = Array.from({ length: this.context.dimensions.height }, () =>
       Array.from({ length: this.context.dimensions.width }, () => null)
@@ -66,18 +68,22 @@ export class GameModel {
   }
 
   public rotate() {
-    this.unsetFigureFromField(this.figure);
-
     const flipMatrix = (matrix: IFieldMap[][]) =>
-      matrix[0].map((column, index) => matrix.map(row => row[index]));
+      matrix[0].map((column, idx) => matrix.map(row => row[idx]));
 
     const rotateMatrix = (matrix: IFieldMap[][]) =>
-      flipMatrix(matrix.reverse());
+      flipMatrix(JSON.parse(JSON.stringify(matrix)).reverse());
 
-    this.figure = {
+    const figure = {
       ...this.figure,
       field: rotateMatrix(this.figure.field)
     };
+
+    this.unsetFigureFromField(this.figure);
+
+    if (!this.checkCollision(figure)) {
+      this.figure = figure;
+    }
 
     this.setFigureToField(this.figure);
   }
@@ -100,6 +106,10 @@ export class GameModel {
 
       if (y) {
         this.removeMatches();
+      }
+
+      if (this.checkGameOver()) {
+        this.gameOver = true;
       }
 
       this.figure = this.getNext();
@@ -135,7 +145,8 @@ export class GameModel {
   public getModel() {
     return {
       field: this.field,
-      points: this.points
+      points: this.points,
+      gameOver: this.gameOver
     };
   }
 
@@ -191,5 +202,15 @@ export class GameModel {
         this.field[i][j] = prev ? prev[j] : null;
       }
     }
+  }
+
+  private checkGameOver() {
+    for (let i = 0; i < this.context.dimensions.width; i++) {
+      if (this.field[0][i]) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

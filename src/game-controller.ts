@@ -1,6 +1,7 @@
 import { Field } from "./components/field";
 import { Cell } from "./components/cell";
 import { Points } from "./components/points";
+import { GameOver } from "./components/game-over";
 import { GameModel } from "./game-model";
 
 export class GameController implements IComponent<null> {
@@ -53,11 +54,15 @@ export class GameController implements IComponent<null> {
   }
 
   public update(params: IComponentParams) {
+    const model = this.game.getModel();
+
+    if (model.gameOver) return;
+
     this.game.move({ y: 1 });
     this.components.forEach(component => {
       if (component instanceof Points) {
         return component.update(params, {
-          points: this.game.getModel().points
+          points: model.points
         });
       }
 
@@ -66,6 +71,14 @@ export class GameController implements IComponent<null> {
   }
 
   public render(params: IComponentParams) {
+    const model = this.game.getModel();
+
+    if (model.gameOver) {
+      const gameOver = new GameOver({ points: model.points }, this.context);
+
+      return gameOver.render(params);
+    }
+
     this.renderField(params);
     this.components.forEach(component => component.render(params));
   }
