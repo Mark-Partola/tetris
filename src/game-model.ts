@@ -96,6 +96,10 @@ export class GameModel {
 
       if (x) return;
 
+      if (y) {
+        this.removeMatches();
+      }
+
       this.figure = this.getNext();
     } else {
       this.figure = nextFigure;
@@ -152,5 +156,28 @@ export class GameModel {
       },
       [] as IPoint[]
     );
+  }
+
+  private removeMatches() {
+    const { width, height } = this.context.dimensions;
+
+    for (let i = height - 1; i >= 0; i--) {
+      for (let j = 0; j < width; j++) {
+        if (!this.field[i][j]) break;
+
+        if (j === width - 1) {
+          this.removeRow(i);
+        }
+      }
+    }
+  }
+
+  private removeRow(yPosition: number) {
+    for (let i = yPosition; i >= 0; i--) {
+      for (let j = 0; j < this.context.dimensions.width; j++) {
+        const prev = this.field[i - 1];
+        this.field[i][j] = prev ? prev[j] : null;
+      }
+    }
   }
 }

@@ -11,6 +11,10 @@ export class GameController implements IComponent<null> {
   };
 
   private context = {
+    theme: {
+      cellColor: "#6f7f90",
+      fieldColor: "#6f7f90"
+    },
     dimensions: this.fieldConfig,
     size: {
       width: this.props.dimensions.width,

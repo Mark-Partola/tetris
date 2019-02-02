@@ -8,10 +8,6 @@ export class Cell implements IComponent<ICellProps> {
     private readonly context: IComponentContext
   ) {}
 
-  public mapProps(map: (props: ICellProps) => ICellProps): void {
-    this.props = map(this.props);
-  }
-
   public update(params: IComponentParams): void {
     // pass
   }
@@ -21,7 +17,7 @@ export class Cell implements IComponent<ICellProps> {
     const { position } = this.props;
 
     ctx.beginPath();
-    ctx.fillStyle = "#6f7f90";
+    ctx.fillStyle = this.context.theme.cellColor;
 
     ctx.rect(
       position.x * cell.size.width + 1,

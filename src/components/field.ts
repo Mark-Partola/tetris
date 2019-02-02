@@ -12,7 +12,7 @@ export class Field implements IComponent<IFieldProps> {
 
   public render({ ctx }: IComponentParams): void {
     ctx.beginPath();
-    ctx.strokeStyle = "#6f7f90";
+    ctx.strokeStyle = this.context.theme.fieldColor;
 
     for (let i = 0; i <= this.context.dimensions.height; i++) {
       ctx.moveTo(0, i * this.context.cell.size.height);

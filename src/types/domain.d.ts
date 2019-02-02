@@ -26,6 +26,10 @@ interface IComponentParams {
 }
 
 interface IComponentContext {
+  theme: {
+    cellColor: string;
+    fieldColor: string;
+  };
   dimensions: IDimensions;
   size: IDimensions;
   cell: {
@@ -34,7 +38,6 @@ interface IComponentContext {
 }
 
 interface IComponent<IProps> {
-  mapProps?: (map: (props: IProps) => IProps) => void;
   update: (params: IComponentParams) => void;
   render: (params: IComponentParams) => void;
 }
