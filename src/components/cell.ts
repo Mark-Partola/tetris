@@ -29,6 +29,7 @@ export class Cell implements IComponent<ICellProps> {
       cell.size.width - 2,
       cell.size.height - 2
     );
+
     ctx.fill();
   }
 }

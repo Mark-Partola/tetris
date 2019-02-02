@@ -8,6 +8,18 @@ interface IPoint {
   y: number;
 }
 
+interface IDeltaPoint {
+  x?: number;
+  y?: number;
+}
+
+type IFieldMap = number | null;
+
+interface IFigure {
+  position: IPoint;
+  field: IFieldMap[][];
+}
+
 interface IComponentParams {
   ctx: CanvasRenderingContext2D;
   dt: number;

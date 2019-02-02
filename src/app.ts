@@ -1,6 +1,5 @@
 import { Loop } from "./loop";
-import { Field } from "./components/field";
-import { Figure } from "./components/figure";
+import { GameController } from "./game-controller";
 
 const WIDTH = 800;
 const HEIGHT = 600;
@@ -21,49 +20,22 @@ document.body.appendChild(canvas);
 
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-const loop = new Loop(1);
-
-const cells = {
-  width: 10,
-  height: 10
-};
-
-const context = {
-  dimensions: cells,
-  size: {
-    width: WIDTH,
-    height: HEIGHT
-  },
-  cell: {
-    size: {
-      width: WIDTH / cells.width,
-      height: HEIGHT / cells.height
-    }
+const loop = new Loop(5);
+const game = new GameController({
+  dimensions: {
+    width: 300,
+    height: 400
   }
-};
+});
 
-const components = [
-  new Field({}, context),
-  new Figure(
-    {
-      position: {
-        x: 5,
-        y: -3
-      },
-      field: [[1, 1], [0, 1], [0, 1]]
-    },
-    context
-  )
-];
+loop.events.on("update", ({ dt }: { dt: number }) => {
+  game.update({ dt, ctx });
+});
 
-loop.events.on("update", (params: { dt: number }) =>
-  components.forEach(component => component.update({ dt: params.dt, ctx }))
-);
-
-loop.events.on("render", (params: { dt: number }) => {
+loop.events.on("render", ({ dt }: { dt: number }) => {
   ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-  components.forEach(component => component.render({ dt: params.dt, ctx }));
+  game.render({ dt, ctx });
 });
 
 loop.run();

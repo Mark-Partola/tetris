@@ -22,7 +22,7 @@ export class Field implements IComponent<IFieldProps> {
       );
     }
 
-    for (let i = 0; i <= this.context.dimensions.height; i++) {
+    for (let i = 0; i <= this.context.dimensions.width; i++) {
       ctx.moveTo(i * this.context.cell.size.width, 0);
       ctx.lineTo(
         i * this.context.cell.size.width,
