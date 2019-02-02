@@ -1,5 +1,6 @@
 import { Field } from "./components/field";
 import { Cell } from "./components/cell";
+import { Points } from "./components/points";
 import { GameModel } from "./game-model";
 
 export class GameController implements IComponent<null> {
@@ -28,7 +29,10 @@ export class GameController implements IComponent<null> {
     }
   };
 
-  private components: IComponent<object>[] = [new Field({}, this.context)];
+  private components: IComponent<any>[] = [
+    new Field({}, this.context),
+    new Points({ points: 0 }, this.context)
+  ];
 
   constructor(private readonly props: { dimensions: IDimensions }) {
     this.game = new GameModel(this.context);
@@ -50,7 +54,15 @@ export class GameController implements IComponent<null> {
 
   public update(params: IComponentParams) {
     this.game.move({ y: 1 });
-    this.components.forEach(component => component.update(params));
+    this.components.forEach(component => {
+      if (component instanceof Points) {
+        return component.update(params, {
+          points: this.game.getModel().points
+        });
+      }
+
+      component.update(params, {});
+    });
   }
 
   public render(params: IComponentParams) {
@@ -59,7 +71,7 @@ export class GameController implements IComponent<null> {
   }
 
   private renderField(params: IComponentParams) {
-    const field = this.game.getField();
+    const { field } = this.game.getModel();
 
     field.forEach((row, rowIdx) => {
       row.forEach((cell, cellIdx) => {

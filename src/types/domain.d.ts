@@ -38,6 +38,6 @@ interface IComponentContext {
 }
 
 interface IComponent<IProps> {
-  update: (params: IComponentParams) => void;
+  update: (params: IComponentParams, updateParams: IProps) => void;
   render: (params: IComponentParams) => void;
 }

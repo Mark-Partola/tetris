@@ -7,6 +7,8 @@ interface IFieldApplyParams {
 export class GameModel {
   private field: IFieldMap[][];
 
+  private points: number = 0;
+
   private figure: IFigure;
 
   constructor(private context: IComponentContext) {
@@ -109,12 +111,16 @@ export class GameModel {
   }
 
   public getNext() {
+    this.points++;
+
     const figures = [
       [[1, 1], [0, 1], [0, 1]],
       [[1, 1], [1, 1]],
       [[1, 1, 1, 1]],
       [[1, 1, 1], [0, 1, 0]],
-      [[1, 1, 0], [0, 1, 0], [0, 1, 1]]
+      [[1, 1, 0], [0, 1, 1]],
+      [[0, 1, 1], [1, 1, 0]],
+      [[1]]
     ];
 
     return {
@@ -126,8 +132,11 @@ export class GameModel {
     };
   }
 
-  public getField() {
-    return this.field;
+  public getModel() {
+    return {
+      field: this.field,
+      points: this.points
+    };
   }
 
   private applyToField({ field, points, value }: IFieldApplyParams) {
@@ -167,12 +176,15 @@ export class GameModel {
 
         if (j === width - 1) {
           this.removeRow(i);
+          i++;
         }
       }
     }
   }
 
   private removeRow(yPosition: number) {
+    this.points += 10;
+
     for (let i = yPosition; i >= 0; i--) {
       for (let j = 0; j < this.context.dimensions.width; j++) {
         const prev = this.field[i - 1];

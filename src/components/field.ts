@@ -6,7 +6,7 @@ export class Field implements IComponent<IFieldProps> {
     private readonly context: IComponentContext
   ) {}
 
-  public update({ dt }: IComponentParams): void {
+  public update(): void {
     // pass
   }
 

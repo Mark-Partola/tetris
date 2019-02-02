@@ -8,7 +8,7 @@ export class Cell implements IComponent<ICellProps> {
     private readonly context: IComponentContext
   ) {}
 
-  public update(params: IComponentParams): void {
+  public update(): void {
     // pass
   }
 
