@@ -1,51 +1,52 @@
 import { Field } from "./components/field";
 import { Cell } from "./components/cell";
-import { Points } from "./components/points";
+import { Stats } from "./components/stats";
 import { GameOver } from "./components/game-over";
-import { GameModel } from "./game-model";
+import { NextFigure } from "./components/next-figure";
+import { GameModel } from "./model/game-model";
+import { UserEvents } from "./user-events";
 
 export class GameController implements IComponent<IComponentContext> {
-  private game: GameModel;
+  private game = new GameModel(this.props);
 
-  private context = this.props;
+  private userEvents = new UserEvents();
 
-  private components: IComponent<any>[] = [
-    new Field({}, this.context),
-    new Points({ points: 0 }, this.context)
-  ];
+  private field = new Field({}, this.props);
+
+  private stats = new Stats({ points: 0, level: 0 }, this.props);
+
+  private nextFigure = new NextFigure({ figure: [] }, this.props);
+
+  private timeDelta = 0;
 
   constructor(private readonly props: IComponentContext) {
-    this.game = new GameModel(this.context);
-
-    document.addEventListener("keydown", e => {
-      if (e.keyCode === 13) {
-        this.game.rotate();
-      }
-
-      if (e.keyCode === 37) {
-        this.game.move({ x: -1 });
-      }
-
-      if (e.keyCode === 39) {
-        this.game.move({ x: 1 });
-      }
-    });
+    this.userEvents.events.on("enter", () => this.game.rotate());
+    this.userEvents.events.on("left", () => this.game.move({ x: -1 }));
+    this.userEvents.events.on("right", () => this.game.move({ x: 1 }));
   }
 
   public update(params: IComponentParams) {
     const model = this.game.getModel();
 
+    this.timeDelta += params.dt;
+
+    if (this.timeDelta < 400 / Math.log1p(model.level)) {
+      return;
+    } else {
+      this.timeDelta = 0;
+    }
+
     if (model.gameOver) return;
 
     this.game.move({ y: 1 });
-    this.components.forEach(component => {
-      if (component instanceof Points) {
-        return component.update(params, {
-          points: model.points
-        });
-      }
 
-      component.update(params, {});
+    this.stats.update(params, {
+      points: model.points,
+      level: model.level
+    });
+
+    this.nextFigure.update(params, {
+      figure: model.nextFigure
     });
   }
 
@@ -53,33 +54,26 @@ export class GameController implements IComponent<IComponentContext> {
     const model = this.game.getModel();
 
     if (model.gameOver) {
-      const gameOver = new GameOver({ points: model.points }, this.context);
+      const gameOver = new GameOver({ points: model.points }, this.props);
 
       return gameOver.render(params);
     }
 
     this.renderField(params);
-    this.components.forEach(component => component.render(params));
+    this.field.render(params);
+    this.stats.render(params);
+    this.nextFigure.render(params);
   }
 
   private renderField(params: IComponentParams) {
     const { field } = this.game.getModel();
 
-    field.forEach((row, rowIdx) => {
-      row.forEach((cell, cellIdx) => {
-        if (cell) {
-          const cell = new Cell(
-            {
-              position: {
-                x: cellIdx,
-                y: rowIdx
-              }
-            },
-            this.context
-          );
+    field.forEach((row, y) => {
+      row.forEach((cell, x) => {
+        if (!cell) return;
 
-          cell.render(params);
-        }
+        const component = new Cell({ position: { x, y } }, this.props);
+        component.render(params);
       });
     });
   }

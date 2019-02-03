@@ -1,4 +1,8 @@
-interface IFieldProps {}
+interface IFieldProps {
+  offset?: IPoint;
+  cellSize?: IDimensions;
+  fieldSize?: IDimensions;
+}
 
 export class Field implements IComponent<IFieldProps> {
   constructor(
@@ -10,18 +14,27 @@ export class Field implements IComponent<IFieldProps> {
 
   public render({ ctx }: IComponentParams): void {
     const { field, cell } = this.context;
+    const { offset = { x: 0, y: 0 } } = this.props;
+    const cellSize = this.props.cellSize || cell.size;
+    const fieldSize = this.props.fieldSize || field.size;
 
     ctx.beginPath();
     ctx.strokeStyle = field.color;
 
-    for (let i = 0; i <= field.size.height; i++) {
-      ctx.moveTo(0, i * cell.size.height);
-      ctx.lineTo(field.size.width * cell.size.width, i * cell.size.height);
+    for (let i = 0; i <= fieldSize.height; i++) {
+      ctx.moveTo(offset.x, i * cellSize.height + offset.y);
+      ctx.lineTo(
+        offset.x + fieldSize.width * cellSize.width,
+        i * cellSize.height + offset.y
+      );
     }
 
-    for (let i = 0; i <= field.size.width; i++) {
-      ctx.moveTo(i * cell.size.width, 0);
-      ctx.lineTo(i * cell.size.width, field.size.height * cell.size.height);
+    for (let i = 0; i <= fieldSize.width; i++) {
+      ctx.moveTo(offset.x + i * cellSize.width, offset.y);
+      ctx.lineTo(
+        offset.x + i * cellSize.width,
+        fieldSize.height * cellSize.height + offset.y
+      );
     }
 
     ctx.stroke();

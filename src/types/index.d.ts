@@ -9,3 +9,5 @@ declare module "@vaalentin/game-loop" {
 }
 
 declare module "eventemitter3";
+
+declare module "ismobilejs";

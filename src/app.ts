@@ -1,3 +1,4 @@
+import isMobile from "ismobilejs";
 import { Loop } from "./loop";
 import { GameController } from "./game-controller";
 
@@ -20,7 +21,7 @@ document.body.appendChild(canvas);
 
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-const loop = new Loop(5);
+const loop = new Loop(60);
 const game = new GameController({
   canvas: {
     size: {
@@ -33,12 +34,12 @@ const game = new GameController({
       width: 15,
       height: 20
     },
-    color: "#6f7f90"
+    color: "#3f4f60"
   },
   cell: {
     size: {
-      width: 20,
-      height: 20
+      width: isMobile.any ? WIDTH / 15 : 20,
+      height: isMobile.any ? HEIGHT / 30 : 20
     },
     color: "#6f7f90"
   }

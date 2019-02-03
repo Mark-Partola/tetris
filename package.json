@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/ismobilejs": "^0.4.1",
     "rollup": "^1.1.2",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
@@ -19,6 +20,7 @@
   "dependencies": {
     "@types/eventemitter3": "^2.0.2",
     "@vaalentin/game-loop": "^1.0.2",
-    "eventemitter3": "^3.1.0"
+    "eventemitter3": "^3.1.0",
+    "ismobilejs": "^0.5.1"
   }
 }

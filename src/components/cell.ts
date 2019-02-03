@@ -1,5 +1,7 @@
 interface ICellProps {
   position: IPoint;
+  offset?: IPoint;
+  size?: IDimensions;
 }
 
 export class Cell implements IComponent<ICellProps> {
@@ -12,16 +14,17 @@ export class Cell implements IComponent<ICellProps> {
 
   public render({ ctx }: IComponentParams): void {
     const { cell } = this.context;
-    const { position } = this.props;
+    const { position, offset = { x: 0, y: 0 } } = this.props;
+    const size = this.props.size || cell.size;
 
     ctx.beginPath();
     ctx.fillStyle = cell.color;
 
     ctx.rect(
-      position.x * cell.size.width + 1,
-      position.y * cell.size.height + 1,
-      cell.size.width - 2,
-      cell.size.height - 2
+      offset.x + position.x * size.width + 1,
+      offset.y + position.y * size.height + 1,
+      size.width - 2,
+      size.height - 2
     );
 
     ctx.fill();
