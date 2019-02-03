@@ -12,7 +12,12 @@ export class PointsModel {
 
   public add(params: IAddNextPoints | IAddMatchPoints) {
     if (params.type === "match") {
-      this.points += params.count * 10;
+      const values = Array.from(
+        { length: params.count },
+        (_, idx) => (idx + 1) * 10
+      );
+
+      this.points += values.reduce((acc, curr) => acc + curr, 0);
     } else {
       this.points += 1;
     }

@@ -23,6 +23,7 @@ export class GameController implements IComponent<IComponentContext> {
     this.userEvents.events.on("enter", () => this.game.rotate());
     this.userEvents.events.on("left", () => this.game.move({ x: -1 }));
     this.userEvents.events.on("right", () => this.game.move({ x: 1 }));
+    this.userEvents.events.on("down", () => this.game.move({ y: 1 }));
   }
 
   public update(params: IComponentParams) {

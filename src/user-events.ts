@@ -30,6 +30,11 @@ export class UserEvents {
         event: "right",
         className: "mobile-right",
         content: "&#8594"
+      },
+      {
+        event: "down",
+        className: "mobile-down",
+        content: "&#8595"
       }
     ];
 
@@ -54,6 +59,10 @@ export class UserEvents {
 
       if (e.keyCode === 39) {
         this.events.emit("right");
+      }
+
+      if (e.keyCode === 40) {
+        this.events.emit("down");
       }
     });
   }
