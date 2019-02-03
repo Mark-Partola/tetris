@@ -13,12 +13,14 @@ export class Points implements IComponent<IPointProps> {
   }
 
   public render({ ctx }: IComponentParams) {
-    ctx.font = "30px Arial";
+    const { field, cell } = this.context;
+
+    ctx.font = "20px Verdana";
 
     ctx.fillText(
       `points: ${this.props.points}`,
-      this.context.size.width + 20,
-      30
+      field.size.width * cell.size.width + 20,
+      20
     );
   }
 }

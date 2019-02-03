@@ -14,8 +14,8 @@ export class GameModel {
   private gameOver: boolean = false;
 
   constructor(private context: IComponentContext) {
-    this.field = Array.from({ length: this.context.dimensions.height }, () =>
-      Array.from({ length: this.context.dimensions.width }, () => null)
+    this.field = Array.from({ length: this.context.field.size.height }, () =>
+      Array.from({ length: this.context.field.size.width }, () => null)
     );
 
     this.figure = this.getNext();
@@ -38,7 +38,7 @@ export class GameModel {
   }
 
   public checkCollision(figure: IFigure) {
-    const { height, width } = this.context.dimensions;
+    const { height, width } = this.context.field.size;
     const points = this.getCoords(figure);
 
     const coords = points.reduce(
@@ -135,7 +135,7 @@ export class GameModel {
 
     return {
       position: {
-        x: ~~(this.context.dimensions.width / 2),
+        x: ~~(this.context.field.size.width / 2),
         y: -3
       },
       field: figures[~~(Math.random() * figures.length)]
@@ -179,7 +179,7 @@ export class GameModel {
   }
 
   private removeMatches() {
-    const { width, height } = this.context.dimensions;
+    const { width, height } = this.context.field.size;
 
     for (let i = height - 1; i >= 0; i--) {
       for (let j = 0; j < width; j++) {
@@ -197,7 +197,7 @@ export class GameModel {
     this.points += 10;
 
     for (let i = yPosition; i >= 0; i--) {
-      for (let j = 0; j < this.context.dimensions.width; j++) {
+      for (let j = 0; j < this.context.field.size.width; j++) {
         const prev = this.field[i - 1];
         this.field[i][j] = prev ? prev[j] : null;
       }
@@ -205,7 +205,7 @@ export class GameModel {
   }
 
   private checkGameOver() {
-    for (let i = 0; i < this.context.dimensions.width; i++) {
+    for (let i = 0; i < this.context.field.size.width; i++) {
       if (this.field[0][i]) {
         return true;
       }

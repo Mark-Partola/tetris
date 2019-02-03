@@ -26,14 +26,16 @@ interface IComponentParams {
 }
 
 interface IComponentContext {
-  theme: {
-    cellColor: string;
-    fieldColor: string;
+  canvas: {
+    size: IDimensions;
   };
-  dimensions: IDimensions;
-  size: IDimensions;
+  field: {
+    size: IDimensions;
+    color: string;
+  };
   cell: {
     size: IDimensions;
+    color: string;
   };
 }
 

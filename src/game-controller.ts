@@ -4,38 +4,17 @@ import { Points } from "./components/points";
 import { GameOver } from "./components/game-over";
 import { GameModel } from "./game-model";
 
-export class GameController implements IComponent<null> {
+export class GameController implements IComponent<IComponentContext> {
   private game: GameModel;
 
-  private fieldConfig = {
-    width: 10,
-    height: 20
-  };
-
-  private context = {
-    theme: {
-      cellColor: "#6f7f90",
-      fieldColor: "#6f7f90"
-    },
-    dimensions: this.fieldConfig,
-    size: {
-      width: this.props.dimensions.width,
-      height: this.props.dimensions.height
-    },
-    cell: {
-      size: {
-        width: this.props.dimensions.width / this.fieldConfig.width,
-        height: this.props.dimensions.height / this.fieldConfig.height
-      }
-    }
-  };
+  private context = this.props;
 
   private components: IComponent<any>[] = [
     new Field({}, this.context),
     new Points({ points: 0 }, this.context)
   ];
 
-  constructor(private readonly props: { dimensions: IDimensions }) {
+  constructor(private readonly props: IComponentContext) {
     this.game = new GameModel(this.context);
 
     document.addEventListener("keydown", e => {

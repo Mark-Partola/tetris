@@ -4,20 +4,18 @@ interface ICellProps {
 
 export class Cell implements IComponent<ICellProps> {
   constructor(
-    private props: ICellProps,
+    private readonly props: ICellProps,
     private readonly context: IComponentContext
   ) {}
 
-  public update(): void {
-    // pass
-  }
+  public update(): void {}
 
   public render({ ctx }: IComponentParams): void {
     const { cell } = this.context;
     const { position } = this.props;
 
     ctx.beginPath();
-    ctx.fillStyle = this.context.theme.cellColor;
+    ctx.fillStyle = cell.color;
 
     ctx.rect(
       position.x * cell.size.width + 1,

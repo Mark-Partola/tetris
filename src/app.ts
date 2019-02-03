@@ -1,8 +1,8 @@
 import { Loop } from "./loop";
 import { GameController } from "./game-controller";
 
-const WIDTH = 800;
-const HEIGHT = 600;
+const WIDTH = window.innerWidth;
+const HEIGHT = window.innerHeight;
 
 const canvas = document.createElement("canvas");
 
@@ -22,15 +22,29 @@ const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
 const loop = new Loop(5);
 const game = new GameController({
-  dimensions: {
-    width: 300,
-    height: 400
+  canvas: {
+    size: {
+      width: WIDTH,
+      height: HEIGHT
+    }
+  },
+  field: {
+    size: {
+      width: 15,
+      height: 20
+    },
+    color: "#6f7f90"
+  },
+  cell: {
+    size: {
+      width: 20,
+      height: 20
+    },
+    color: "#6f7f90"
   }
 });
 
-loop.events.on("update", ({ dt }: { dt: number }) => {
-  game.update({ dt, ctx });
-});
+loop.events.on("update", ({ dt }: { dt: number }) => game.update({ dt, ctx }));
 
 loop.events.on("render", ({ dt }: { dt: number }) => {
   ctx.clearRect(0, 0, WIDTH, HEIGHT);
